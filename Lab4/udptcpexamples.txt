@@ -1,0 +1,135 @@
+UDP:
+
+Client:
+
+from socket import *
+
+def startClient():
+    #print("started client")
+    serverPort = 8080
+    serverName= '127.0.0.1'
+    clientSocket = socket(AF_INET, SOCK_DGRAM)
+    clientSocket.connect((serverName, serverPort))
+    #send in bytes
+    sentence = input("Enter a sentence")
+    print(sentence)
+    sentence = sentence.encode()
+    clientSocket.sendto(sentence, (serverName, serverPort))
+
+    #received in bytes, then encoded to utf-8
+    msentence, serveraddr = clientSocket.recvfrom(1024)
+    msentence = msentence.decode()
+    print("Server address: ", serveraddr)
+    print("From server: ", msentence)
+    clientSocket.close()
+
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    startClient()
+
+
+
+Server:
+
+#Single client HTTP server
+
+from socket import *
+
+def startServer():
+	#create Socket
+    serverPort = 8080
+    serverSocket = socket(AF_INET,SOCK_DGRAM)
+    serverSocket.bind(('', serverPort))
+    print("The server is ready to receive on PORT",serverPort)
+    while 1:
+        #connectionSocket, addr = serverSocket.accept()
+        #print("connection received from client", addr)
+        message, clientaddr = serverSocket.recvfrom(1024)
+        message = message.decode()
+        print("Message received from client: ", message)
+        print("Client IP: ", clientaddr)
+        # Get the client request
+        #receive in bytes and then convert to utf-8
+        #request = connectionSocket.recv(1024).decode()
+        #print(request)
+        #request = request.upper()
+        newmessage = message.upper().encode()
+        #send in bytes
+        serverSocket.sendto(newmessage, clientaddr)
+
+
+if __name__ == '__main__':
+    startServer()
+
+
+
+TCP:
+
+Client:
+
+from socket import *
+
+def startClient():
+    #print("started client")
+    serverPort = 8080
+    serverName= '127.0.0.1'
+    clientSocket = socket(AF_INET, SOCK_STREAM)
+    clientSocket.connect((serverName, serverPort))
+    #send in bytes
+    sentence = input("Enter a sentence")
+    print(sentence)
+    sentence = sentence.encode()
+    clientSocket.sendall(sentence)
+
+    #received in bytes, then encoded to utf-8
+    msentence = clientSocket.recv(1024).decode()
+    print("From server", msentence)
+    clientSocket.close()
+
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    startClient()
+
+
+
+
+Server:
+
+# Single client HTTP server
+
+from socket import *
+
+
+def startServer():
+    # create Socket
+    serverPort = 8080
+    serverSocket = socket(AF_INET, SOCK_STREAM)
+    serverSocket.bind(('', serverPort))
+    serverSocket.listen(1)
+    print("The server is ready to receive on PORT", serverPort)
+    while 1:
+        connectionSocket, addr = serverSocket.accept()
+        print("connection received from client", addr)
+
+        # Get the client request
+        # receive in bytes and then convert to utf-8
+        request = connectionSocket.recv(1024).decode()
+        print(request)
+        request = request.upper()
+        # send in bytes
+        connectionSocket.sendall(request.encode())
+        connectionSocket.close()
+
+
+if __name__ == '__main__':
+    startServer()
+
+
+
+
+
+

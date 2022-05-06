@@ -1,0 +1,14 @@
+{
+  "maxThreads": 2,
+  "blockedIP":[],
+  "files" : [
+      {
+        "name": "/",
+        "PATH": "./index.html"
+      },
+      {
+        "name": "/HelloWorld.html",
+        "PATH": "./HelloWorld.html"
+      }
+  ]
+}
